@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SALES - TradeTrove</title>
+    <style>
+        /* Stili di base */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Stili dell'header */
+        header {
+            background-color: rgba(107, 103, 246);
+            color: white;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        header img {
+            height: 80px;
+            width: auto;
+            background-color: white;
+        }
+
+        nav a {
+            color: white;
+            margin: 15px 15px;
+            text-decoration: none;
+            align-items: center;
+            margin: 35px 35px;
+            width: 1200px;
+        }
+
+        .search-bar input {
+            padding: 5px;
+            width: 300px;
+        }
+
+        .banner {
+            background-image: url('/static/cart-purple.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .banner h1 {
+            font-size: 3em;
+        }
+
+        .categories img, .featured-products img {
+            width: 50%;
+            height: auto;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .grid-item {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .grid-item img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        footer {
+            background-color: rgba(107, 103, 246);
+            color: white;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="{{ url_for('home') }}">
+        <img src="/static/tradetrove.jpg" alt="Logo">
+    </a>
+    <nav>
+        <a href="{{ url_for('categories') }}">Categorie</a>
+        <a href="{{ url_for('offersbanner') }}">Offerte</a>
+        <a href="{{ url_for('cart') }}">Carrello</a>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('profile') }}">{{ current_user.username }} Gestisci Profilo</a>
+    {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+    </nav>
+    <div class="search-bar">
+        <input type="text" placeholder="Cerca prodotti...">
+        <a href="{{ url_for('found') }}">
+            <button>Cerca</button>
+        </a>
+    </div>
+</header>
+
+<section>
+    <div id="welcome-message" class="welcome-message">
+        <h1 style="text-align: center; font-size: 40px;">Ecco cosa abbiamo trovato...</h1>
+    </div>
+
+    <div class="grid-container">
+        {% for product in products %}
+        <div class="grid-item">
+            <a href="{{ url_for('found', product_id=product.id) }}">
+                <img src="{{ url_for('static', filename=product.image_url) }}" alt="{{ product.name }}">
+            </a>
+            <div class="info">
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p>Prezzo: €{{ product.price }}</p>
+                <span style="font-size:larger;color:orange" class="stars">★★★★☆</span>
+                <span>{{ product.rating }} / 5</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 TradeTrove. Tutti i diritti riservati.</p>
+    <p><a href="{{ url_for('terms') }}">Termini e Condizioni</a> | <a href="{{ url_for('faq') }}">FAQ</a> | <a href="{{ url_for('contacts') }}">Contatti</a></p>
+    <a href="https://github.com/kristiNezhaj14/progettoBD">
+        <img style="width:35px; height:35px" src="/static/github.png" alt="Logo">
+    </a>
+</footer>
+
+<!-- Inclusione del file JavaScript -->
+<script src="/static/script.js"></script>
+
+</body>
+</html>
